@@ -1,0 +1,106 @@
+-----------------------------------------------------------------------------
+--                                     key
+
+--44p
+
+--PRYMARY KEY = UNIQUE + NOT NULL
+--프라이머리 키는 식별자이다. 유일해야 하고 (주민등록번호처럼) null 값이여서는 안된다. 
+
+CREATE TABLE TABLE_PK01(
+  ID CHAR(3) PRIMARY KEY,
+  NAME VARCHAR2(20)
+);
+
+INSERT INTO TABLE_PK01 VALUES('100', 'ORACLE');
+
+INSERT INTO TALBE_PK01 VALUES('200', 'ORACLE');
+
+INSERT INTO TALBE_PK01 VALUES(NULL, 'ORACLE');
+-------- 
+
+
+CREATE TABLE TABLE_PK02(
+  ID CHAR(3),
+  NAME VARCHAR2(20),
+  NUM NUMBER,
+  CONSTRAINT TP02_PK PRIMARY KEY (ID,NAME)
+);
+
+INSERT INTO TABLE_PK02 VALUES('100','ORACLE',1);
+
+INSERT INTO TABLE_PK02 VALUES('200','JAVA',2);
+
+INSERT INTO TABLE_PK02 VALUES(NULL,'ORACLE',3);
+--SQL Error [1400] [23000]: ORA-01400: cannot insert NULL into ("KH"."TABLE_PK02"."ID")
+
+INSERT INTO TABLE_PK02 VALUES('200','ORACLE',3);
+--200 오라클은 잘 들어감. 오라클도 있고 200도 있는데 되는 이유, 아이디와 이름을 같이 묶어서 prymarykey라고 했기 때문에 =복합키/슈퍼
+--200 자바가 아니라 200 오라클이기 때문에 잘 들어감.
+
+
+
+
+
+--46p foreign key
+CREATE TABLE TABLE_FK01(
+  ID CHAR(3) PRIMARY KEY,
+  NAME VARCHAR2(20),
+  PKID CHAR(3) REFERENCES TABLE_PK01(ID)  --: id 컬럼을 레퍼런스 할 것이다. 
+);
+
+INSERT INTO TABLE_FK01 VALUES('123','ORACLE','100');
+
+INSERT INTO TABLE_FK01 VALUES'124','JAVA','200');   --SQL Error [933] [42000]: ORA-00933: SQL command not properly ended
+
+INSERT INTO TABLE_FK01 VALUES('125','ORACLE','300');
+--SQL Error [2291] [23000]: ORA-02291: integrity constraint (KH.SYS_C007107) violated - parent key not found
+--parent key not found :
+--100 이랑 200은 되는데 300은 안된다고 뜸. 
+
+SELECT* FROM  TABLE_FK01;
+
+
+
+
+CREATE TABLE TABLE_FK02(
+  ID CHAR(3) PRIMARY KEY, 
+  PKID CHAR(3), 
+  PKNAME VARCHAR2(20),
+  FOREIGN KEY(PKID,PKNAME) REFERENCES TABLE_PK02(ID,NAME)
+);
+
+INSERT INTO TABLE_FK02 VALUES('123','100','ORACLE');
+INSERT INTO TABLE_FK02 VALUES('124','200','JAVA');
+INSERT INTO TABLE_FK02 VALUES('125','300','ORACLE');
+--300오라클 안되는 이유 ?
+--SQL Error [2291] [23000]: ORA-02291: integrity constraint (KH.SYS_C007109) violated - parent key not found
+--부모테이블의 해당 컬럼에 값이 없기 때문에 찾을 수 없습니다. 라고 나옴. 
+
+
+
+--48p
+CREATE TABLE TABLE_CHECK01(
+  EMP_ID CHAR(3) PRIMARY KEY,
+  NAME VARCHAR2(20),
+  MARRIAGE CHAR(1) CHECK(MARRIAGE IN('Y','N'))
+);
+INSERT INTO TABLE_CHECK01 VALUES('123','HONG','Y');
+INSERT INTO TABLE_CHECK01 VALUES('124','LEE','N');
+INSERT INTO TABLE_CHECK01 VALUES('125','KIM','A');
+--SQL Error [2290] [23000]: ORA-02290: check constraint (KH.SYS_C007110) violated
+--check 제약조건에 위배되었기 때문에 에러남. y 나 n만 들어가야 하는데 a 가 들어가있기 때문에 에러남. 
+
+
+
+--49p
+CREATE TABLE TABLE_CHECK02(
+  EMP_ID CHAR(3) PRIMARY KEY,
+  NAME VARCHAR2(20),
+  MARRIAGE CHAR(1),
+  CONSTRAINT TC_CK CHECK(MARRIAGE IN('Y','N'))
+);
+
+INSERT INTO TABLE_CHECK02 VALUES('123','HONG','Y');
+INSERT INTO TABLE_CHECK02 VALUES('124','LEE','N');
+INSERT INTO TABLE_CHECK02 VALUES('125','KIM','A');
+
