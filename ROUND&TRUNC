@@ -1,0 +1,30 @@
+------------ROUND / TRUNC(-------------------------
+/*
+ * ROUND / TRUNC(컬럼 or 숫자[, 소수점 자리지정])
+지정한 자리수에서 반올림/버림
+자리 지정하는 값은 반드시 정수값 사용 (생략하면 0)
+> 0 : 소수점 이하 자리
+< 0 : 소수점 이상 자리
+.기준 오른쪽으로 가는게 +
+.기준 왼쪽으로 가는게 -
+ */
+SELECT ROUND(123.456) FROM DUAL;
+SELECT ROUND(123.456, 1) FROM DUAL;  -- 123.5| 4에서 반올림해서 4가 5가 됨.
+SELECT TRUNC(123.456, 1) FROM DUAL;
+SELECT TRUNC(123.456, -1) FROM DUAL;
+
+-- there's screeen shot which you can see each select at once all together.
+
+
+-------------CEIL / FLOOR() 올림/ 버림. ------------------
+SELECT CEIL(123.456) FROM DUAL;
+SELECT FLOOR(123.456) FROM DUAL;
+
+
+SELECT CEIL(SAL/1000) FROM EMP;
+SELECT FLOOR(SAL/1000) FROM EMP;
+
+
+SELECT CEIL(SAL/1000)AS "CEIL",
+FLOOR(SAL/1000) AS "FLOOR", SAL/1000 AS "SAL"FROM EMP;   -------??????????????? sal /1000 왜해?
+--차이 : -ROUND / TRUNC : 소숫점 지정이 됨. / CEIL / FLOOR() : 소숫점 지정이 안됨. 
