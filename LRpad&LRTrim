@@ -1,0 +1,52 @@
+--------------------------------------------------------------------------------------
+-- LPAD vs RPAD
+SELECT LPAD(ENAME,7,'*') FROM EMP;
+/*--LPAD(ENAME,7,'*')|
+-----------------|
+**SMITH          |
+**ALLEN          |
+***WARD          |
+**JONES          |
+*/
+SELECT RPAD(ENAME,10,'*') FROM EMP;
+/*
+ * RPAD(ENAME,10,'*')|
+------------------|
+SMITH*****        |
+ALLEN*****        |
+WARD******        |
+JONES*****        |
+ */
+
+SELECT RPAD(ENAME,2,'*') FROM EMP; -- rpad/ lpad 둘다 글자보다 작게 정렬시키면 무조건 뒷부분이 짤림. 
+
+
+
+
+------------------53p
+/*
+ * LTRIM / RTRIM (‘문자열’,’제거할 문자(열)’)
+문자열 제거. 패턴으로 제거가 아님!
+ */
+SELECT LTRIM('xyxzyyTech6 327', 'xyz') AS "Q1",  --ltrim: x 나 y 나 z 이면 삭제하자! 삭제 안하는게 나올 때까지 삭제하다가 멈춤.T에서 멈추고 뒤에 x있어도 삭제안함.
+RTRIM('xyxzyyTech6 327', '0123456789') AS "Q2",  --숫자이면 삭제하자. 제거하다가 6뒤에 공백이 있음. 공백이 있기 때문에 멈춤. 
+RTRIM('xyxzyyTech6 327', ' 0123456789') AS "Q3" FROM DUAL; --0 앞에 공백 있음! : 공백 포함해서 숫자이면 삭제하자 
+  -- 제거대상의 문자열에 숫자 + 문자 섞어서 써도 됨! 
+  
+  SELECT RTRIM('xyxzyyTech6 327','0123456789 ch')FROM DUAL;
+ -- 출력값 : xyxzyyTe : 공백,숫자,문자가 지워지고 나머지가 출력됨. 
+ 
+
+-------------------------54p
+--TRIM(‘제거할 문자 하나’ FROM ‘문자열’) - 양쪽 모두 제거
+
+ --Q1) ‘xyxzyyTech6 327xx’ 에서 양쪽의 x를 제거하자.
+SELECT TRIM('x' FROM 'xyxzyyTech6 327xx') FROM DUAL;   --yxzyyTech6 327                 
+
+--Q2) ‘xyxzyyTech6 327xx’ 에서 양쪽의 xy를 제거하자.
+SELECT TRIM('xy' FROM 'xyxzyyTech6 327xx') FROM DUAL;
+--SQL Error [30001] [99999]: ORA-30001: trim set should have only one character
+--문자 하나 넣어야 하는데 두개 넣어서 에러남.
+
+
+
