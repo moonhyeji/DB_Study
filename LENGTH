@@ -1,0 +1,32 @@
+
+----------------------------------------------------------------------57p
+--LENGTH / LENGTHB
+--주어진 컬럼의 문자열(값)의 길이를 반환 (NUMBER/BYTE)
+
+SELECT LENGTH(ENAME) FROM EMP;
+SELECT LENGTHB(ENAME) FROM EMP;
+
+
+
+CREATE TABLE LENTEST(
+ID VARCHAR2(10)
+);
+
+INSERT INTO LENTEST VALUES('L');
+INSERT INTO LENTEST VALUES('LEE');
+
+
+INSERT INTO LENTEST VALUES('이잉');
+
+SELECT LENGTH(ID), LENGTHB(ID) FROM LENTEST;
+
+ROLLBACK;
+
+/*
+ * LENGTH(ID)|LENGTHB(ID)|
+----------|-----------|
+         1|          1|  길이가 1이니까 길이는 1, 알파벳 하나에 1바이트
+         3|          3|  길이가 3이니까 길이 3, 알파벳 3개라 3바이트
+         1|          3|  한글 한글자니까 길이는 1, 한글은 하나당 3바이트 먹음. ((이)하나에)/ / 이잉의 경우 2.3 나옴. 
+ */
+
