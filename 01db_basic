@@ -1,3 +1,9 @@
+SELECT * FROM emp;
+SET pagesize 100;
+SELECT  * FROM EMP;
+SET LINESIZE 150;
+SELECT * FROM EMP;
+
 
 
 
@@ -31,7 +37,7 @@ SELECT*FROM EMP;
 
 
 --Q7) 부서 테이블의 구조를 보자.
-SELECT*FROM DEPT WHERE 1=2;  
+SELECT*FROM DEPT WHERE 1=2;   --no rows selected. 윈도우에서 이렇게 뜸
 
 SELECT*FROM DEPT WHERE 1=1;
 
@@ -39,15 +45,472 @@ DESC dept; --<- 맥북은 에러남.
 
 
 
+/*
+ * 구조(전체 컬럼)만 복제
+ CREATE TABLE 새로운 테이블명 AS SELECT * FROM 테이블명 WHERE 1=2;
+ WHERE 1=2;를넣어주면구조만 복제할 수있다.
+ */
+
+
+-----CREATE TABLE---------------------------------------------------
+
 --Q8) 사원 테이블에서 사원의 이름, 월급, 커미션(COMM)을 출력하자.
-SELECT ENAME, SAL, COMM
+SELECT ENAME, SAL, COMM 
 FROM EMP;
 
 --Q9) 사원 테이블의 모든 데이터를 "OO님이 OO에 입사를 하고 OO의 월급을 받습니다." 형식인 하나의 컬럼으로 출력하자.
 SELECT ENAME||'님이 '||HIREDATE||'에 입사를 하고 '||SAL||'의 월급을 받습니다.'AS "TEST"
 FROM EMP;
+--AS TEST해주면 컬럼 이름이 TEST로 바뀐다.
 
 
 SELECT ename AS "사원이름"
 FROM emp;
 --ename 을 별칭인 '사원이름'으로 바꾸자.
+
+------*****쌍따옴표: 컬럼에 별칭을 줄 때는 쌍따옴표 붙이기
+--그냥 문자열 일 땐 홑따옴표 붙이기.
+
+
+
+
+
+
+
+/*
+ * SELECT 컬럼명,… 
+FROM 테이블명
+WHERE 컬럼의 조건;
+ */
+---------SELECT FROM WHERE------------------------------------------------
+--Q1) 사원테이블에서 사원번호가 '7844' 인 사원의 사원번호, 이름, 월급을 출력하자.
+SELECT EMPNO, ENAME, SAL
+FROM EMP
+WHERE EMPNO = 7844;
+--WHERE EMPNO = '7844'; --- 숫자의 경우 싱글쿼트 생략가능. 
+
+
+--Q2) 사원테이블에서 'SMITH'의 사원번호, 이름, 월급을 출력하자.
+SELECT EMPNO, ENAME, SAL 
+FROM EMP 
+WHERE ENAME ='SMITH';
+
+--Q3) 사원테이블에서 입사일이 1980년 12월 17일인 사원의 모든 데이터를 출력하자.
+SELECT ENAME, HIREDATE 
+FROM EMP
+WHERE HIREDATE = '1980/12/17';
+/*WHERE HIREDATE = '1980-12 -17';
+WHERE HIREDATE = '80/12/17';
+WHERE HIREDATE = '80-12 -17';
+
+이 4개 중 하나를 이용하여 쓰기!
+ */
+
+
+--Q4) 1980년도에서 1982년도 사이에 입사한 사원의 이름과 입사일을 출력하자.
+SELECT ENAME, HIREDATE 
+FROM EMP
+WHERE HIREDATE >= '1980/01/01'
+AND HIREDATE <= '1982/12/31';
+
+
+--또는,
+SELECT ENAME, HIREDATE
+FROM EMP
+WHERE HIREDATE BETWEEN '1980/01/01' AND'1982/12/31' ;
+
+
+--Q5) 월급이 2000 이하인 사원의 이름과 월급을 출력하자.
+SELECT ENAME, SAL
+FROM EMP 
+WHERE SAL <= 2000;
+
+
+--Q6) 월급이 1000에서 2000 사이인 사원의 이름과 월급을 출력하자.
+SELECT ENAME, SAL
+FROM EMP 
+WHERE SAL >= 1000
+AND SAL <+ 2000;
+--또는
+
+SELECT ENAME, SAL
+FROM EMP 
+WHERE SAL BETWEEN 1000 AND 2000;
+-- 이 때 비트윈은 1000과 2000을 포함한다. 
+
+
+--Q7) 사원번호가 7369, 7499, 7521인 사원들의 이름과 월급을 출력하자.
+SELECT ENAME, SAL
+FROM EMP 
+WHERE EMPNO = 7369
+OR EMPNO = 7499
+OR EMPNO = 7521
+--7369 이거나.7499 이거나 7521 인 사원이니까 오어를 사용. 
+
+--또는
+
+
+SELECT ENAME, SAL
+FROM EMP 
+WHERE EMPNO IN(7369, 7499, 7521);
+/*in 이라는 연산자: 이 안에 있다면! 
+NOT IN() = ()에 포함되지 않는 애들! 
+ */
+
+
+
+-------------------------------------------------------------------------------------------
+--19p.                              INSERT
+/*
+ * INSERT INTO 테이블명
+ *VALUES(전체 컬럼 내용);
+ *
+ *INSERT INTO 테이블명(특정 컬럼명)
+VALUES(특정 컬럼 내용);
+
+ */
+--예)사원테이블에 사원번호 1111, 이름 HONG, 직업 DEVELOPER, 관리자 없음
+--입사일 오늘날짜, 월급 3000, 커미션 400, 부서번호 30 을 추가해 보자.
+INSERT INTO EMP
+VALUES(1111,'HONG','DEVELOPER',NULL,SYSDATE,3000,400,30);
+
+
+
+
+--사원테이블의 이름과 봉급에 LEE와 5000을 추가하자.
+INSERT INTO EMP (ENAME, SAL)
+VALUES('LEE',5000);
+-->실행하면 cannot insert NULL  ERROR가 나온다.
+--: cannot insert NULL into ("KH"."EMP"."EMPNO")
+--("USER","TABLE","COLUMN")--ORA-01400: cannot insert NULL into ("KH"."EMP"."EMPNO")
+--EMPNO는 null 들어갈수없는데 널값이 들어갔다고 에러남. ******* 중요!! 
+--( 여기서 empno가 not null이라는 것을 확인하기 위해서는 윈도우는 desc emp;라고 치면 notnull 에 대해서 나옴. 
+-- 디비버는 안나오기 때문에 "docker exec -it oralce sqlplus"들어가서 해야함 ㅠㅠ 
+
+--따라서, EMPNO를 함께 넣어주니까 에러가 뜨지않는다! 
+INSERT INTO EMP (EMPNO, ENAME, SAL)
+VALUES(1112,'LEE',5000);
+
+
+------------------------------------------------------------------------------
+--                            UPDATE
+/*
+ * UPDATE 테이블명
+SET 컬럼명 = 값
+WHERE 조건;
+
+ */
+                             
+
+--HONG의 월급3500으로 바꾸기.
+UPDATE EMP SET SAL = 3500 WHERE ENAME ='HONG';  
+UPDATE EMP SET SAL = 900 WHERE ENAME = 'SMITH';
+SELECT * FROM EMP;
+
+/*
+ * DELETE FROM 테이블명
+WHERE 조건;
+ */
+--월급이 3500인 사원 없애기.
+DELETE FROM EMP 
+WHERE SAL = 3500;
+
+--이름이 LEE인 사원 없애기
+DELETE FROM EMP 
+WHERE ENAME = 'LEE';
+--DELETE는 다 row들과 관계된 것.
+-----------------------------------------------------------------------------
+--                                SEQUENCE
+
+
+
+CREATE SEQUENCE SEQ_EMPID88 --SEQUENCE란 증가 혹은 감소를 의미.
+START WITH 300   --시작번호
+DECREMENT BY 5; --정수값 만큼 증가
+--반복안함
+  --미리생성안함.
+SELECT SEQ_EMPID88.NEXTVAL FROM DUAL;
+
+
+CREATE SEQUENCE SEQ_EMPID01 --SEQUENCE란 증가 혹은 감소를 의미.
+START WITH 300   --시작번호
+INCREMENT BY 5 --정수값 만큼 증가
+NOCYCLE --반복안함
+NOCACHE ; --미리생성안함.
+-- 이상태에서 셀렉트 쿼리를 불러서 시퀀스를 가지고 오려고 하면에러남.
+--SELECT*FROM SEQ_EMPID01; -SQL Error [2201] [42000]: ORA-02201: sequence not allowed here
+-->5씩 끝없이 증가.
+
+-------만일 CACHE가 5라면, : 메모리에 5개의 정수값을 미리 생성해 놓고 하나씩 가져오는 것이다. 
+--[300,305,310,315,320]을 저장해놓고하나씩 가져온다.그리고 320만큼 끝났을 때 다시 그다음 정수 5개를 가지고 와 대기시킨다.
+
+
+
+SELECT SEQ_EMPID01.NEXTVAL FROM DUAL; 
+--SEQ_EMPID01:방금만든시퀀스
+--NEXTVAL : 시퀀스의 다음 값
+--DUAL : 오라클이 가진 가상테이블
+--=오라클이 가진 가상테이블에서 방금 만든 시퀀스의 다음값을 가지고 오자.
+
+---------------------------
+--26
+
+CREATE SEQUENCE SEQ_EMPID02
+START WITH 5 --5에서 시작해서
+INCREMENT BY 5 --5씩 증가하고
+MAXVALUE 15 --최대값은15로 지정
+CYCLE --반복함.
+NOCACHE; --미리생성안함
+
+SELECT SEQ_EMPID02.NEXTVAL FROM DUAL;
+--5,10,15 다음은 1,6,11이 된다. cycle로 인해 15에max찍고 start with으로되돌아갔을 때,반복의 시작1부터 시작한다.
+--START WITH 5 는 맨 처음의 시작값만을 의미한다.
+
+
+
+
+--27p. WHERE 1=2; 사용으로 구조만 가지고 오기!
+SELECT *
+FROM EMP
+WHERE 1=2;
+
+---------------------------------------------------------
+
+/*
+ *CREATE TABLE 테이블명(
+  컬럼명 DATA_TYPE(SIZE),
+  컬럼명 DATA_TYPE(SIZE),
+   ...
+   CONSTRAINT 제약조건명 제약조건 (컬럼명...)
+ */
+
+
+--Q1) SIZE가 10인 문자형 컬럼 ID와 PW를 가진 TEST 테이블을 생성해보자
+CREATE TABLE TEST(
+ID VARCHAR2(10),
+PW VARCHAR2(10)
+);
+
+
+--TEST테이블에 MYID', 'MYPW'를 추가하자.
+INSERT INTO TEST
+VALUES('MYID', 'MYPW');
+SELECT * FROM TEST;
+--여기서 INSERT INTO TEST VALUES('MYID', 'MYPW'); 를 누르고 실행 누르고 실행하면 하나씩 추가된다. 인써트니까.
+
+
+----Q2) 사원 테이블(EMP)의 모든 구조와 데이터를 TEST01로 복사하여 생성해보자.
+CREATE TABLE TEST01 AS 
+SELECT * FROM EMP;
+SELECT * FROM TEST01;
+
+
+
+--Q3) 사원 테이블에서 사원의 번호와 이름을 TEST02로 복사하여 생성해보자.
+CREATE TABLE TEST02 AS 
+SELECT ENAME, EMPNO FROM EMP;
+SELECT * FROM TEST02;
+
+
+
+
+
+----Q4) 사원 테이블에서 사원의 번호와 이름을 TEST03으로 복사하여 생성해보자.
+--   단, 컬럼명을 M1, M2로 변경하면서 복사하자.
+CREATE TABLE TEST03 AS
+SELECT EMPNO AS "M1",
+       ENAME AS "M2" 
+FROM EMP;
+
+SELECT * FROM TEST03;
+
+
+/*또한 이렇게 해도 된다.
+ * CREATE TABLE TEST03(M1, M2) AS 
+ * SELECT EMPNO, ENAME 
+ * FROM EMP;
+ */
+
+
+----Q5) 사원 테이블의 구조만 TEST04로 복사하여 생성해보자.
+CREATE TABLE TEST04 
+AS SELECT * FROM EMP
+WHERE 1=2;
+
+SELECT * FROM TEST04;
+ROLLBACK;
+
+
+
+--Q6) 부서 테이블(DEPT) 의 구조만 TEST05로 복사하여 생성해보자.
+
+CREATE TABLE TEST05
+AS SELECT * FROM DEPT
+WHERE 1=2;
+
+SELECT * FROM TEST05;
+
+
+----------------------------------------------------------------------------------------
+--ex) TEST 테이블에 SIZE가 20인 문자형 컬럼 ADDR을 추가하자.
+/*
+ * 테이블 수정
+ALTER TABLE 테이블명
+ADD(컬럼명 DATA_TYPE ...)
+
+ */
+
+--ALTER: 테이블, 뷰, 프로시저 등을 수정
+--ADD(컬럼명 DATA_TYPE ...)
+ALTER TABLE TEST ADD(ADDR VARCHAR2(20));
+-------------------------------
+/*
+ *
+ INSERT INTO 테이블명
+ VALUES(전체 컬럼 내용);
+ */
+
+
+--위 만들어진 test 테이블에 'KH','INFO','KANGNAM'로우를 추가하자.
+INSERT INTO TEST
+VALUES('KH','INFO','KANGNAM');
+SELECT * FROM TEST;
+ 
+
+
+-------------------------------
+--Q) TEST 테이블을 삭제하자. purge가 있으면 / purge: 제거하다
+DROP TABLE TEST PURGE; ----Updated Rows	0
+SELECT * FROM RECYCLEBIN;   --영구삭제 된 것이라 리사이클 빈에도없음.
+
+
+------------PURGE가 없을 경우
+DROP TABLE TEST01; -- oracle안의 휴지통으로 들어감.
+SELECT * FROM RECYCLEBIN;  --리사이클 빈에서 제거된 것 확인.
+----------------------------
+
+
+
+SELECT 컬럼명,
+FROM 테이블명;
+
+SELECT *
+FROM EMP
+WHERE  1=2;
+---------------------------------------------------------------------------------------------------2/15
+---------------------------------------------------------------------------------------------------2/15
+
+
+
+
+
+
+--40P
+--제약 조건 걸기 . id char(3)  char의 형태로 된 3크기의 id는 null 이여선 안된다. 
+CREATE TABLE TABLE_NOTNULL01(
+ID CHAR(3) NOT NULL,
+NAME VARCHAR2(20)
+);
+
+INSERT INTO TABLE_NOTNULL01
+VALUES('100', 'ORACLE');
+
+INSERT INTO TABLE_NOTNULL01
+VALUES(NULL, 'ORACLE');
+--에러남.: SQL Error [1400] [23000]: ORA-01400: cannot insert NULL into ("KH"."TABLE_NOTNULL01"."ID")
+--id 에 null 값을 넣을 수 없음. 
+
+SELECT * FROM TABLE_NOTNULL01;
+
+/*
+CONSTRAINT : 제약조건 걸꺼야. 
+id 라는 컬럼에 
+tn02_id_nn 에 NOT NULL 을 넣을거야.
+*/
+-----------------------------------------------------------------------------ok
+
+CREATE TABLE TABLE_NOTNULL02(
+ID CHAR(3),
+NAME VARCHAR2(20),
+CONSTRAINT TN02_ID_NN NOT NULL(ID)
+);
+--SQL Error [904] [42000]: ORA-00904: : invalid identifier
+--컬럼레벨에서만 설정할 수 있는데 얘는 테이블 레벨에서 설정했기 때문에 에러남. 
+
+-----------------------------------------------------------------------------
+
+--unique: 해당 컬럼 또는 컬럼 조합 값이 유일하도록  하는 것 .
+CREATE TABLE TABLE_UNIQUE01(
+ID CHAR(3) UNIQUE,
+NAME VARCHAR2(20)
+);
+
+--1. 맨 처음에 100을 인서트 해줬기 때문에 안에 지정된값은 100 이 됨 . 
+--SQL Error [1] [23000]: ORA-00001: unique constraint (KH.SYS_C007102) violated
+
+INSERT INTO TABLE_UNIQUE01  -- 다시 넣어주면 안됨 중복이라  
+VALUES('220','ORACLE');
+
+INSERT INTO TABLE_UNIQUE01  --안됨 얘도 중복 
+VALUES('100', 'JAVA');
+
+INSERT INTO TABLE_UNIQUE01  --됨.
+VALUES(NULL, 'ORACLE');
+
+
+SELECT*FROM TABLE_UNIQUE01
+
+--같은값(100)은 중복으로 넣으면 안되고 null값은 들어갈 수 있음.
+
+DROP TABLE TABLE_UNIQUE01;
+
+
+
+-------------다른 예제를 만들어 봄!!!!!
+CREATE TABLE TABLE_UNIQUE33(
+ID CHAR(3) UNIQUE,
+NAME VARCHAR2(20)
+);
+
+INSERT INTO TABLE_UNIQUE33
+VALUES('200','ORACLE');
+
+INSERT INTO TABLE_UNIQUE33
+VALUES('200', 'JAVA');
+
+INSERT INTO TABLE_UNIQUE33
+VALUES(NULL, 'ORACLE');
+
+SELECT*FROM TABLE_UNIQUE33;
+-----------------------------------------------------------------------------
+
+
+
+CREATE TABLE TABLE_UNIQUE02(ID CHAR(3),
+NAME VARCHAR2(20),
+NUM NUMBER,
+CONSTRAINT TU02_ID_UN UNIQUE(ID,NAME)  --  <- id,name을 묶어서 unique 라고 제약조건 걸음. 
+);
+
+--그리고 값 넣기.
+
+
+--id 와 unique를 합쳐서 보고있기 때문에, (100 oracle)이런식으로 묶어서 봄. 
+INSERT INTO TABLE_UNIQUE02
+VALUES('100', 'ORACLE',1); 
+-- 100 oracle 을 맨처음 넣음   <-다시한번 넣어도 역시 에러뜸 중복 안됨. 
+--SQL Error [1] [23000]: ORA-00001: unique constraint (KH.TU02_ID_UN) violated
+
+
+INSERT INTO TABLE_UNIQUE02
+VALUES('100', 'JAVA',2);  -- (100 java) 100은 맞지만 자바라서 안됨. 
+
+INSERT INTO TABLE_UNIQUE02
+VALUES('100', 'JAVA',3);
+-- SQL Error [1] [23000]: ORA-00001: unique constraint (KH.TU02_ID_UN) violated 에러뜸. --중복이라서!!! 
+
+
+INSERT INTO TABLE_UNIQUE02
+VALUES('100', 'OCLE',4); 
+
+SELECT*FROM TABLE_UNIQUE02;
