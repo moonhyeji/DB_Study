@@ -1,0 +1,88 @@
+----------------------------- 55p
+--SUBSTR(컬럼 or 문자열, 시작위치[, 반환할 개수])  : 시작위치부터 [반환할 갯수만큼] 문자열을 잘라서 반환  // 갯수 안쓰면 끝까지.
+
+SELECT SUBSTR(ENAME, 1, 2),ENAME 
+FROM EMP;
+--ename 의 시작위치 1번 인덱스부터 2개. 
+-- SM       
+-- AL       
+-- WA       
+
+SELECT SUBSTR(ENAME, -1) ,ENAME 
+FROM EMP;  
+-- '-1' : 뒤에서부터 시작방향으로 가라 .
+/*
+ * SUBSTR(ENAME,-1)|ENAME |
+----------------|------|
+H               |SMITH |
+N               |ALLEN |
+D               |WARD  |
+S               |JONES |
+ */
+
+
+
+
+----------------------------- 56p
+--INSTR(컬럼 or 문자열,찾으려는 문자열, 시작위치 ,횟수) 
+-- 횟수: 문자열이 몇번 나오는지를 의미. 예를들어 sims 의 경우 
+
+
+SELECT ENAME, INSTR('ADAMS', 'S', 1, 1) 
+FROM EMP;
+
+
+SELECT ENAME, INSTR(ENAME, 'S', 1, 1) 
+FROM EMP;
+/*
+ * ENAME |INSTR(ENAME,'S',1,1)|
+------|--------------------|
+SMITH |                   1|  s가 첫번째에 나옴.
+ALLEN |                   0|
+WARD  |                   0|
+JONES |                   5|  s가 앞에서부터 5번째에 나옴.
+MARTIN|                   0|
+BLAKE |                   0|
+CLARK |                   0|
+ */
+
+
+--첫번째 ename문자열에서 1번째인덱스에 시작해서 1번째  문자가  's' 일 때. 
+SELECT ENAME 
+FROM EMP
+WHERE INSTR(ENAME, 'S', 1, 1) = 5 ;
+ 
+
+SELECT ENAME, INSTR(ENAME, 'L', -1, 2) FROM EMP;
+/*
+ * ENAME |INSTR(ENAME,'L',-1,2)|
+------|---------------------|
+SMITH |                    0|
+ALLEN |                    2| 
+WARD  |                    0|
+JONES |                    0|
+MARTIN|                    0|
+BLAKE |                    0|
+CLARK |                    0|
+ */
+
+
+
+--INSTR(컬럼 or 문자열,   찾으려는 문자(열)  , 시작위치 , 횟수]])
+SELECT ENAME, INSTR(ENAME, 'L', 1,2) AS "L1", 
+
+INSTR(ENAME, 'L', -1, 2) AS "L -1" 
+FROM EMP;
+/*
+ENAME |L1|L -1|
+------|--|----|
+SMITH | 0|   0|
+ALLEN | 3|   2| .
+WARD  | 0|   0|
+
+ */
+--ALLEN:
+-- 앞에서부터 찾아서    시작위치 1 에서 시작해서 횟수 2 all 의 al의 l이 첫번째고 all의 마지막 l이 두번째 횟수로 찾은 애고,
+--두번째 횟수로 찾은 애는 인덱스 세번째에 위치해서 3 이나옴,     
+--  -3,-4 에서 하나씩 나옴. 이 -4의 위치는 '2' 앞에서 찾든 뒤에서 찾든 인덱스는 앞에서부터 찾는거라서
+
