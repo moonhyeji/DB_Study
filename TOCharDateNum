@@ -1,0 +1,54 @@
+--63P : TO_CHAR(입력 타입[, 형식])
+
+--9: 자리 수 지정
+SELECT TO_CHAR(1234,'99999') FROM DUAL;
+
+-- 0 : 남는 자리를 0으로 표시
+SELECT TO_CHAR(1234,'00000') FROM DUAL;
+
+--$ 또는 L : 통화기호 표시
+SELECT TO_CHAR(1234,'L9999') FROM DUAL;
+
+--. 또는 , : 지정한 위치에 . 또는 , 표시
+SELECT TO_CHAR(1234,'99,999') FROM DUAL;
+
+--EEEE : 과학 지수 표기법
+SELECT TO_CHAR(1234,'9.9EEEE') FROM DUAL;
+
+----------------------------------------------------------------------
+SELECT TO_CHAR(SYSDATE, 'PM HH24:MI:SS') FROM DUAL;  --오전 10:31:51          
+SELECT TO_CHAR(SYSDATE, 'PM HH12:MI:SS') FROM DUAL;  --오전 10:31:51          
+
+
+SELECT TO_CHAR(SYSDATE, 'MON DY, YYYY') FROM DUAL;  --2월  월, 2021
+SELECT TO_CHAR(SYSDATE, 'YYYY-FMMM-DD DAY') FROM DUAL; --2021-2-15 월요일     --*FM : 0 or 공백 제거            
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD') FROM DUAL; --2021-02-15      / - - 없애주면 그냥 20210215 뜸.             
+SELECT TO_CHAR(SYSDATE, 'YEAR, Q') FROM DUAL;   --TWENTY TWENTY-ONE, 1    : 년도, 분기.문자로 불러주세요!      
+
+
+-------------------------------------------------------------
+--TO_DATE(입력 타입[, 형식]) : char문자열 타입을 date 날짜 타입으로 바꾸기.
+SELECT TO_DATE('20100101','YYYYMMDD') AS DATENAME FROM DUAL;   --2010-01-01 00:00:00            ----------날짜
+--20100101 가 YYYYMMDD형식의 날짜다 라고 알려줬기 때문에  날짜값을 출력해주는 기본적인 형태가 "2010-01-01 00:00:00" 라서.
+
+
+
+SELECT TO_CHAR(TO_DATE('20100101','YYYYMMDD'),'YYYY,MON') FROM DUAL; --2010,1월                    --------문자열 
+--TO_DATE('20100101','YYYYMMDD') 라는 날짜 타입을 YYYY,MON'라는 형태의 문자열로 다시 바꾸자. 
+SELECT TO_CHAR(TO_DATE('20100101','YYYYMMDD'),'YYYY,MON') FROM DUAL; --2010,1월                    --------문자열 
+
+
+
+SELECT TO_CHAR("20100101",'YYYY') FROM DUAL; --하면 왜 안되지.????????????????????
+-------------------------------------------------------------
+
+
+--TO_NUMBER(입력 타입[, 형식]) : 변환되었을 때 숫자인 문자열만 가능
+
+SELECT ENAME,
+  TO_NUMBER(SUBSTR(HIREDATE,1,2)) AS 년,
+  TO_NUMBER(SUBSTR(HIREDATE,4,2)) AS 월
+FROM EMP;
+
+
+
