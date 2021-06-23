@@ -1,0 +1,33 @@
+
+--68p---------------중요!!!!!!!!!!!--------------------------------------------
+--NVL(컬럼, 해당 컬럼의 NULL값을 변환할 값)
+--null값은 계산할 수 없음!!!
+--계산할 수 없는 애들을 계산할 수 있도로 바꿔주는 애 = nvl 
+--이름, 커미션, 커미션이 없는 것은 0으로 나타내자. 
+SELECT ENAME, COMM, NVL(COMM,0) 
+FROM EMP;
+
+--이름, 커미션, 커미션이 없는 것은 출력 안되도록 나타내자. 
+SELECT ENAME, COMM, NVL(COMM,NULL) 
+FROM EMP;
+
+--이름, 커미션, 커미션이 없는 것은 100으로 나타내자. 
+SELECT ENAME,  COMM,   NVL(COMM,100) 
+FROM EMP;
+
+
+--이름과 연봉 연봉에 커미션이 더해진 것을 출력하자. 
+SELECT ENAME, SAL*12, SAL*12+COMM 
+FROM EMP;
+/*COMM에서 null인 부분들이 계산이 안됨. 
+*ENAME |SAL*12|SAL*12+COMM|
+------|------|-----------|
+SMITH |  9600|           |
+ALLEN | 19200|      19500|
+WARD  | 15000|      15500|
+JONES | 35700|           |
+ */
+
+--     이름,    연봉,    연봉+ 커미션 ( 커미션이 없으면 comm = null이면 출력안됨.) , 연봉 + 커미션.
+SELECT ENAME, SAL*12,    SAL*12 + COMM ,                               SAL*12 + NVL(COMM,0) 
+FROM EMP;
