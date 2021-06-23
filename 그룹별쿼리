@@ -1,0 +1,40 @@
+
+----------------------------------------------------------------
+--그룹별 쿼리 : GROUP BY : 같은 조건에 해당하는 값을 묶어서 그룹으로 표시해준다.
+
+--Q1) 부서별 월급 합계를 구하자
+SELECT DEPTNO, SUM(SAL) 
+FROM EMP 
+GROUP BY DEPTNO;
+
+
+--Q2) 직업별 월급 평균을 구하자
+SELECT JOB, AVG(SAL) 
+FROM EMP 
+GROUP BY JOB;
+
+--Q3) sal별 해당 sal의 갯수를 구하자. 
+SELECT SAL, COUNT(SAL) 
+FROM EMP 
+GROUP BY SAL;  --SAL기준으로 묶어서 
+
+
+------having ----------------------------------------------------------
+--where 이 그룹절을 가지고 있을 경우, WHERE SUM(SAL) 과 같을 경우 WHRER 대신 HAVING 을 써준다 
+
+--Q1) 부서별 월급 합계를 구하자. 단, 월급의 합계가 7000 이상인 부서만 출력하자.
+SELECT DEPTNO, SUM(SAL) 
+FROM EMP 
+GROUP BY DEPTNO
+HAVING SUM(SAL) >= 7000;
+--원래는 group by 뒤에 having 써야 함!!!!!!!!!!!!
+--* HAVING WHERE 같이 쓰기 가능!!!!!!!!
+
+
+SELECT DEPTNO, SUM(SAL) 
+FROM EMP 
+WHERE SUM(SAL) >= 7000
+GROUP BY DEPTNO;  
+-- SQL Error [934] [42000]: ORA-00934: group function is not allowed here  : 그룹펑션은 웨어에 들어갈 수 없다고 에러뜸. 
+
+
