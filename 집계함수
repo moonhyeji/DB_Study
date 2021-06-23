@@ -1,0 +1,21 @@
+
+----------------------------------------------------------------------------------------------------------
+--UNION : 합집합 (중복 제거)
+SELECT DEPTNO FROM DEPT 
+UNION
+SELECT DEPTNO FROM EMP;
+
+--UNION ALL : 합집합 (중복 허용)
+SELECT DEPTNO FROM DEPT
+UNION ALL 
+SELECT DEPTNO FROM EMP;
+
+--INTERSECT : 교집합
+SELECT DEPTNO FROM DEPT 
+INTERSECT 
+SELECT DEPTNO FROM EMP;
+
+--MINUS : 차집합
+SELECT DEPTNO FROM DEPT 
+MINUS 
+SELECT DEPTNO FROM EMP;
