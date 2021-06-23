@@ -1,0 +1,13 @@
+
+
+--다중 행 함수------------------------------------------------------------------
+--집계함수 (COUNT, MAX, MIN, SUM, AVG) = 그룹함수           / comm =커미션. 
+SELECT COUNT(*),COUNT(COMM), COUNT(NVL(COMM,0)) 
+FROM EMP; 
+    
+    
+    
+--월급의 최대값, 최소값, 총합, 평균을 구해보자.
+SELECT MAX(SAL), MIN(SAL), SUM(SAL), AVG(SAL) 
+FROM EMP;
+
